@@ -136,7 +136,7 @@ function existe ($arregloViajes, $codViaje){
             $band = false;
             $indice = $i;
         }
-        elseif (((count($arregloViajes)) == $i) && ($indice == -1)) {
+        elseif ((count($arregloViajes) == $i) && ($indice == -1)) { //no esta funcionando (no descubri pq), busque una alternativa a este mensaje en el menu
             echo "\n";
             echo "No se encontro el viaje con ese codigo. \n";
             echo "\n";
@@ -221,7 +221,7 @@ $viajes = array ();
 
 //creo el objeto $viaje1
 $viaje1 = new Viaje (44302, "Mendoza", 35, $pasajeros);
-array_push ($viajes, $viaje1); //lo pusheo a mi array viajes
+array_push ($viajes, $viaje1); //lo pusheo a mi array viajes |||||| Vi en discord que se va a trabajar solo con un viaje, pero ya habia hecho todo el codigo con array y funcionando de esta manera, no me parecio mal dejarlo asi
 
 
 //Programa principal se ejecutan las opciones que el usuario seleccione
