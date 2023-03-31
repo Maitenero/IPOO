@@ -85,7 +85,7 @@ function cargarLosPasajeros ($tope){
         echo "Desea cargar otro pasajero? (si/no) ";
         $select = trim(fgets(STDIN));
         echo "\n";
-        if (count($arreglo) == $tope){
+        if (count($arreglo) == ($tope + 1)){
             echo "No puedes agregar mas pasajeros debido a que llegaste al maximo de pasajeros posibles. \n";
             echo "\n";
         }
