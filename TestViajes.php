@@ -274,7 +274,7 @@ do {
             //creo un switch que dependiendo la opcion elegida, ejecuta los metodos necesarios
             switch ($opcion) {
                     case 1: //Ver la informacion del viaje
-                    $funciono = $viajes[$seguir]->mostrarDatos();
+                    $funciono = $viajes[$seguir]->__toStrign();
                     echo $funciono;
                     break;
 

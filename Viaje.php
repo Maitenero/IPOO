@@ -163,7 +163,7 @@ class Viaje {
     }
 
     //creo una funcion para poder mostrar todos los datos del viaje.
-    public function mostrarDatos(){ // esto seria el __toStrign???, que tan mal esta que le llame de otra manera?
+    public function __toStrign(){ // esto seria el __toStrign???, que tan mal esta que le llame de otra manera?
         $informacion = "";
         $informacion = $informacion."El codigo del viaje es: ".$this->getCodigoViaje()."\n";
         $informacion = $informacion."El destino del viaje es: ".$this->getDestino()."\n";
