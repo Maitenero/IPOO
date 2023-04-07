@@ -72,17 +72,18 @@ class Viaje {
 
     //Creo un metodo para modificar dni de los pajeros
     public function cambiarNombrePas  ($dniPasajero, $nuevoNombre){
+        $i = 0;
         $rta = ""; //es valido usar una misma variable en todos los metodos? nunca se usan dos metodos al mismo tiempo no deberia tener conflicto, y no creo variables en exeso al usar solo una, dudasssssss
         $fueEncontrado = false;
         $arrayfunct = $this->getDatosPasajeros();
-        for ($i=0; $i < count($this->getDatosPasajeros ()) ; $i++) { 
+        while ($i < count($this->getDatosPasajeros ()) && !$fueEncontrado) { 
             if (strcmp($dniPasajero,$this->getDatosPasajeros()[$i]["DNI"]) === 0){
                 $arrayfunct [$i]["Nombre"] = $nuevoNombre;
-                $i = count($this->getDatosPasajeros ());
                 $rta = "El cambio se realizo con exito. \n"."\n";
                 $fueEncontrado = true;
                 $this->setDatosPasajeros ($arrayfunct);
             }
+            $i++;
         }
         if (!$fueEncontrado) {
             $rta = "No se encontro el pasajero con el DNI: ".$dniPasajero." \n"."\n";
@@ -92,17 +93,20 @@ class Viaje {
 
      //Creo un metodo para modificar el apellido de los pajeros
      public function cambiarApellidoPas  ($dniPasajero, $nuevoApellido){
+        $fueEncontrado = false;
+        $i = 0;
         $rta = "";
         $arrayfunct = $this->getDatosPasajeros();
-        for ($i=0; $i < count($this->getDatosPasajeros ()) ; $i++) { 
+        while ($i < count($this->getDatosPasajeros ()) && !$fueEncontrado) { 
             if (strcmp($dniPasajero,$this->getDatosPasajeros ()[$i]["DNI"]) === 0){
+                $fueEncontrado = true;
                 $arrayfunct [$i]["Apellido"] = $nuevoApellido;
-                $i = 20000000;
                 $rta = "El cambio se realizo con exito. \n"."\n";
                 $this->setDatosPasajeros ($arrayfunct);
             }
+            $i++;
         }
-        if ($i == count($this->getDatosPasajeros ())){
+        if (!$fueEncontrado){
             $rta = "El cambio no pudo realizarse, es posible que el DNI del pasajero a modificar no sea valido, vuelva a intentarlo. \n"."\n";
         }
         return $rta;
@@ -110,36 +114,42 @@ class Viaje {
 
      //Creo un metodo para modificar el DNI de los pajeros
      public function cambiarDniPas  ($dniPasajero, $nuevoDni){
+        $fueEncontrado = false;
+        $i = 0;
         $rta = "";
         $arrayfunct = $this->getDatosPasajeros();
-        for ($i=0; $i < count($this->getDatosPasajeros ()) ; $i++) { 
+        while ($i < count($this->getDatosPasajeros ()) && !$fueEncontrado) { 
             if (strcmp($dniPasajero,$this->getDatosPasajeros ()[$i]["DNI"]) === 0){
+                $fueEncontrado = true;
                 $arrayfunct[$i]["DNI"] = $nuevoDni;
-                $i = 20000000;
                 $rta = "El cambio se realizo con exito. \n"."\n";
                 $this->setDatosPasajeros ($arrayfunct);
             }
+            $i++;
         }
-        if ($i == count($this->getDatosPasajeros ())){
+        if (!$fueEncontrado){
             $rta = "El cambio no pudo realizarse, es posible que el DNI del pasajero a modificar no sea valido, vuelva a intentarlo. \n"."\n";
         }
         return $rta;
     }
 
     public function cambiarPasajero ($dniPasajero, $nuevoNombre, $nuevoApellido, $nuevoDni){
+        $fueEncontrado = false;
+        $i = 0;
         $rta = "";
         $arrayfunct = $this->getDatosPasajeros();
-        for ($i=0; $i < count($this->getDatosPasajeros ()) ; $i++) { 
+        while ($i < count($this->getDatosPasajeros ()) && !$fueEncontrado) { 
             if (strcmp($dniPasajero,$this->getDatosPasajeros ()[$i]["DNI"]) === 0){
+                $fueEncontrado = true;
                 $arrayfunct[$i]["Nombre"] = $nuevoNombre;
                 $arrayfunct[$i]["Apellido"] = $nuevoApellido;
                 $arrayfunct[$i]["DNI"] = $nuevoDni;
-                $i = 20000000;
                 $rta = "El cambio se realizo con exito. \n"."\n";
                 $this->setDatosPasajeros ($arrayfunct);
             }
+            $i++;
         }
-        if ($i == count($this->getDatosPasajeros ())){
+        if (!$fueEncontrado){
             $rta = "El cambio no pudo realizarse, es posible que el DNI del pasajero a modificar no sea valido, vuelva a intentarlo. \n"."\n";
         }
         return $rta;
@@ -163,7 +173,7 @@ class Viaje {
     }
 
     //creo una funcion para poder mostrar todos los datos del viaje.
-    public function __toStrign(){ // esto seria el __toStrign???, que tan mal esta que le llame de otra manera?
+    public function __toStrign(){ 
         $informacion = "";
         $informacion = $informacion."El codigo del viaje es: ".$this->getCodigoViaje()."\n";
         $informacion = $informacion."El destino del viaje es: ".$this->getDestino()."\n";
