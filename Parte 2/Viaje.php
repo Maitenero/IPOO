@@ -119,17 +119,19 @@ class Viaje {
         $i = 0;
         $rta = "";
         $arrayfunct = $this->getDatosPasajeros();
-        while ($i < count($this->getDatosPasajeros ()) && !$fueEncontrado) { 
-            if (strcmp($dniPasajero,$this->getDatosPasajeros()[$i]->getNroDocumento ()) === 0){
-                $fueEncontrado = true;
-                $arrayfunct[$i]->setNroDocumento ($nuevoDni);
-                $rta = "El cambio se realizo con exito. \n"."\n";
-                $this->setDatosPasajeros ($arrayfunct);
+        if ($this->sePuedeAgregar($nuevoDni)){
+            while ($i < count($this->getDatosPasajeros ()) && !$fueEncontrado) { 
+                if (strcmp($dniPasajero,$this->getDatosPasajeros()[$i]->getNroDocumento ()) === 0){
+                    $fueEncontrado = true;
+                    $arrayfunct[$i]->setNroDocumento ($nuevoDni);
+                    $rta = "El cambio se realizo con exito. \n"."\n";
+                    $this->setDatosPasajeros ($arrayfunct);
+                }
+                $i++;
             }
-            $i++;
         }
         if (!$fueEncontrado){
-            $rta = "El cambio no pudo realizarse, es posible que el DNI del pasajero a modificar no sea valido, vuelva a intentarlo. \n"."\n";
+            $rta = "El cambio no pudo realizarse, es posible que el DNI del pasajero a modificar no sea valido, o el nuevo DNI ya se encuentre en el viaje, vuelva a intentarlo. \n"."\n";
         }
         return $rta;
     }
@@ -218,7 +220,7 @@ class Viaje {
     }
 
     //creo un metodo para poder mostrar todos los datos del viaje.
-    public function __toStrign(){ 
+    public function __toString(){ 
         $informacion = "";
         $informacion = $informacion."El codigo del viaje es: ".$this->getCodigoViaje()."\n";
         $informacion = $informacion."El destino del viaje es: ".$this->getDestino()."\n";

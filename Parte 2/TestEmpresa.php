@@ -1,7 +1,8 @@
 <?php
-include_once ('Viaje2.php');//incluyo el archivo de la clase viaje
+include_once ('Viaje.php');//incluyo los archivo de las clases 
 include_once ('Pasajero.php');
 include_once ('ResponsableV.php');
+include_once ('Empresa.php');
 
 //Creo el array de pasajeros
 $pasajeros = array (
@@ -23,6 +24,20 @@ $pasajeros = array (
     $pasajeros[17] = new Pasajero ("Carlos","Duende",31743891,23456),
     $pasajeros[18]  = new Pasajero ("Sofia","Miralobos",23407994,245623456)
 );
+
+//creo un responsable de viaje para mi viaje pre cargado
+$resp1= new ResponsableV (12345,123456,"Julio","Amarillo");
+
+//creo mi array $viajes para almacenar todos los viajes..
+$viajes = array ();
+
+//creo el objeto $viaje1
+$viaje1 = new Viaje (44302, "Mendoza", 35, $pasajeros, $resp1);
+array_push ($viajes, $viaje1); //lo pusheo a mi array viajes |||||| Vi en discord que se va a trabajar solo con un viaje, pero ya habia hecho todo el codigo con array y funcionando de esta manera, no me parecio mal dejarlo asi
+
+$empresa = new Empresa ($viajes);
+
+//echo $empresa->__toString(); //solo para probar funcionamiento. 
 
 //Funcion para cargar datos numericos
 /*
@@ -159,32 +174,6 @@ function crearViaje (){
     
 }          
 
-//Creo una funcion que me diga si el objeto viaje existe o no 
-/*
-@return INT
-*/
-function existe ($arregloViajes, $codViaje){
-    $i = 0;
-    $band = true;
-    $indice = -1;
-    while (( $i < (count($arregloViajes))) && $band ){
-        $clave = $arregloViajes[$i]->getCodigoViaje ();
-        if (strcmp($clave, $codViaje) === 0){
-            echo "\n";
-            echo "El viaje fue cargado correctamente. \n";
-            echo "\n";
-            $band = false;
-            $indice = $i;
-        }
-        elseif ((count($arregloViajes) == $i) && ($indice == -1)) { //no esta funcionando (no descubri pq), busque una alternativa a este mensaje en el menu
-            echo "\n";
-            echo "No se encontro el viaje con ese codigo. \n";
-            echo "\n";
-        }
-        $i++;
-    }
-    return $indice;
-}
 
 //Creo Una funcion que depliega el menu para seleccionar la opcion principal
 /*
@@ -286,16 +275,6 @@ function seleccionarOpcionPasajero (){
     return $opcionSelect;
 }
 
-//creo un responsable de viaje para mi viaje pre cargado
-$resp1= new ResponsableV (12345,123456,"Julio","Amarillo");
-
-//creo mi array $viajes para almacenar todos los viajes..
-$viajes = array ();
-
-//creo el objeto $viaje1
-$viaje1 = new Viaje (44302, "Mendoza", 35, $pasajeros, $resp1);
-array_push ($viajes, $viaje1); //lo pusheo a mi array viajes |||||| Vi en discord que se va a trabajar solo con un viaje, pero ya habia hecho todo el codigo con array y funcionando de esta manera, no me parecio mal dejarlo asi
-
 
 //Programa principal se ejecutan las opciones que el usuario seleccione
 do {
@@ -320,16 +299,20 @@ do {
         case 1: 
             $nuevoViaje = crearViaje();
             echo "El viaje se creo con exito. \n";
-            array_push ($viajes, $nuevoViaje);
+            $empresa->agregarViaje($nuevoViaje);
             echo "\n";
             break;
         case 2:
             echo "Escriba el codigo del viaje deseado: \n";
             $viajeDes = cargarNumerico ();
-            $seguir = existe ($viajes, $viajeDes);
+            $seguir = $empresa->existe ($viajeDes);
             echo "\n";
             if ($seguir == -1){
                 echo "El viaje ".$viajeDes." no pudo ser encontrado, vuelva a intentarlo. \n";
+                echo "\n";
+            }
+            else{
+                echo "El viaje ".$viajeDes." se cargo correctamente. \n";
                 echo "\n";
             }
             break;
@@ -352,14 +335,14 @@ do {
             //creo un switch que dependiendo la opcion elegida, ejecuta los metodos necesarios
             switch ($opcion) {
                     case 1: //Ver la informacion del viaje
-                    $funciono = $viajes[$seguir]->__toStrign();
+                    $funciono = $empresa->getViajes()[$seguir]->__toString();
                     echo $funciono;
                     break;
 
                 case 2: //Cambiar el codigo del viaje
                     echo "Escriba nuevo codigo de viaje: ";
                     $nuevoCodigo = cargarNumerico ();
-                    $viajes[$seguir]->cambiarCodigo($nuevoCodigo);
+                    $empresa->getViajes()[$seguir]->cambiarCodigo($nuevoCodigo);
                     echo "El cambio fue realizado con exito. \n";
                     echo "\n";
                     break;
@@ -367,14 +350,14 @@ do {
                         echo "Escriba el nuevo destino: ";
                         $nuevoDestino = cargarLetras();
                         echo "\n";
-                        $viajes[$seguir]->cambiarDestino($nuevoDestino);
+                        $empresa->getViajes()[$seguir]->cambiarDestino($nuevoDestino);
                         echo "El cambio fue realizado con exito. \n";
                         echo "\n";
                     break;
                 case 4: //Cambiar el maximo de pasajeros
                         echo "Escriba el nuevo numero maximo de pasajeros: ";
                         $nuevoMaximo = cargarNumerico();
-                        $viajes[$seguir]->cambiarCantPasajeros($nuevoMaximo);
+                        $empresa->getViajes()[$seguir]->cambiarCantPasajeros($nuevoMaximo);
                         echo "El cambio fue realizado con exito. \n";
                         echo "\n";
                     break;
@@ -390,7 +373,7 @@ do {
                                     echo "Escriba el nuevo nombre del pasajero: ";
                                     $nombre = cargarLetras();
                                     echo "\n";
-                                    $funciono = $viajes[$seguir]->cambiarNombrePas($dni,$nombre);
+                                    $funciono = $empresa->getViajes()[$seguir]->cambiarNombrePas($dni,$nombre);
                                     echo $funciono;
                                 
                                 break;
@@ -399,7 +382,7 @@ do {
                                     echo "Escriba el nuevo apellido del pasajero: ";
                                     $apellido = cargarLetras();
                                     echo "\n";
-                                    $funciono = $viajes[$seguir]->cambiarApellidoPas($dni,$apellido); 
+                                    $funciono = $empresa->getViajes()[$seguir]->cambiarApellidoPas($dni,$apellido); 
                                     echo $funciono; 
                                 break;
                             case 3: //Cambiar el DNI de un pasajero
@@ -407,7 +390,7 @@ do {
                                     echo "Escriba el nuevo DNI del pasajero: ";
                                     $newDni = cargarNumerico();
                                     echo "\n";
-                                    $funciono = $viajes[$seguir]->cambiarDniPas($dni,$newDni);
+                                    $funciono = $empresa->getViajes()[$seguir]->cambiarDniPas($dni,$newDni);
                                     echo $funciono;
                                 break;
                             case 4: //Cambiar el telefono de un pasajero
@@ -415,7 +398,7 @@ do {
                                     echo "Escriba el nuevo telefono del pasajero: ";
                                     $newTelefono = cargarNumerico();
                                     echo "\n";
-                                    $funciono = $viajes[$seguir]->cambiarTelefono($dni,$newTelefono);
+                                    $funciono = $empresa->getViajes()[$seguir]->cambiarTelefono($dni,$newTelefono);
                                     echo $funciono;
                                 break;
                             case 5: //Cambiar todos los datos de un pasajero 
@@ -432,7 +415,7 @@ do {
                                     echo "Escriba el nuevo telefono del pasajero: ";
                                     $newTelefono = cargarNumerico();
                                     echo "\n";
-                                    $funciono = $viajes[$seguir]->cambiarPasajero($dni,$nombre,$apellido,$newDni,$newTelefono);
+                                    $funciono = $empresa->getViajes()[$seguir]->cambiarPasajero($dni,$nombre,$apellido,$newDni,$newTelefono);
                                     echo $funciono;
                                 break;
                         }
@@ -450,7 +433,7 @@ do {
                         echo "Ingrese el telefono del pasajero a agregar: \n";
                         $telefono = cargarNumerico();
                         echo "\n";
-                        $funciono = $viajes[$seguir]->agregarPasajero($nombre,$apellido,$dni,$telefono);
+                        $funciono = $empresa->getViajes()[$seguir]->agregarPasajero($nombre,$apellido,$dni,$telefono);
                         echo $funciono;
                     break;
                 case 8: //salir del menu
