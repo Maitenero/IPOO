@@ -7,11 +7,11 @@ class Pasajero {
     private $nroTicket;
 
     //creo el metodo constructor de mi clase
-    public function __construct ($nombre, $apellido, $nroAsiento, $nroTicket){
+    public function __construct ($nombre, $apellido, $nroAsiento){
         $this->nombre = $nombre;
         $this->apellido = $apellido;
         $this->nroAsiento = $nroAsiento;
-        $this->nroTicket = $nroTicket;
+        //$this->nroTicket = null;
     }
 
     //creo los metodos de acceso

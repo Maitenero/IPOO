@@ -5,20 +5,29 @@ class Empresa {
     private $viajes;
     private $pasajeros;
 
-    public function __construct ($viajes){
+    public function __construct ($viajes, $pasajeros){
     
         $this->viajes = $viajes;
+        $this->pasajeros = $pasajeros;
     }
 
     public function getViajes (){
         return $this->viajes;
     }
 
+    public function getPasajeros (){
+        return $this->pasajeros;
+    }
+
     public function setViajes ($newViajes){
         $this->viajes = $newViajes;
     }
 
-    public function darPorcentajeIncremeto ($pasajero){
+    public function setPasajeros ($newPasajeros){
+        $this->pasajeros = $newPasajeros;
+    }
+
+    public function darPorcentajeIncremento ($pasajero){
         $porcentaje = null;
         if($pasajero instanceof Pasajero){
             $porcentaje = 10;
@@ -30,7 +39,8 @@ class Empresa {
             else {
                 $porcentaje = 35;
             }
-        }elseif ($pasajero instanceof PasajeroEsp){
+        }
+        elseif ($pasajero instanceof PasajeroEsp){
             if (count($pasasajero->getNecesidades()) > 1){
                 $porcentaje = 30;
             }
@@ -64,6 +74,13 @@ class Empresa {
         $colViajes = $this->getViajes();
         array_push ($colViajes, $newViaje );
         $this->setViajes($colViajes);
+    }
+
+    public function agregarPasajero ($newPasajero){
+        $colPas = [];
+        $colPas = $this->getPasajeros();
+        array_push($colPas, $newPasajero);
+        $this->setPasajeros($colPas);
     }
 
     public function __toString (){

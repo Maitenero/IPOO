@@ -37,7 +37,7 @@ $viajes = array ();
 $viaje1 = new Viaje (44302, "Mendoza", 35, $pasajeros, $resp1, 2000, 450000);
 array_push ($viajes, $viaje1); //lo pusheo a mi array viajes |||||| Vi en discord que se va a trabajar solo con un viaje, pero ya habia hecho todo el codigo con array y funcionando de esta manera, no me parecio mal dejarlo asi
 
-$empresa = new Empresa ($viajes,$pasajeros);
+$empresa = new Empresa ($viajes, $pasajeros);
 
 //echo $empresa->__toString(); //solo para probar funcionamiento. 
 
@@ -151,6 +151,8 @@ function crearResponsable (){
 @return OBJET  || ?????? COMO SE ESCRIBIRIA? 
 */
 function crearViaje (){
+    $total = 0;
+    $valor = null;
     $codigo = 0;
     $destino = "";
     $pasajerosMaximos = 0;
@@ -166,8 +168,12 @@ function crearViaje (){
     echo "\n";
     //$pasjerosViaje = cargarLosPasajeros ($pasajerosMaximos);
     $respV = crearResponsable ();
+    echo "\n";
+    echo "Ingrese el valor del pasaje: \n";
+    $valor = cargarNumerico();
+    echo "\n";
 
-    $objeto = new Viaje ($codigo, $destino, $pasajerosMaximos, $respV);
+    $objeto = new Viaje ($codigo, $destino, $pasajerosMaximos, $respV,$valor, $total);
 
     return $objeto;
     
@@ -255,7 +261,7 @@ function seleccionarOpcionPasajero (){
     echo "1. Cambiar el Nombre de un pasajero. \n";
     echo "2. Cambiar el apellido de un Pasajero. \n";
     echo "3. Cambiar Asiento de un pasajero. \n";
-    echo "4. Cambiar el numero de telefono de un pasajero. \n";
+    echo "4. Agregar necesidades (solo pasajero especiales). \n";
     echo "5. Modificar todos los datos de un pasajero. \n";
     echo "6. Volver. \n";
     echo "///////////////////////////////////////////////////////////////// \n";
@@ -363,8 +369,8 @@ do {
                 case 5: //Cambiar datos de un pasajero 
                         $opcionPasajero = seleccionarOpcionPasajero ();
                         if($opcionPasajero > 0 && $opcionPasajero < 6){
-                            echo "Escriba el DNI del pasajero a modificar: ";
-                            $dni = cargarNumerico();
+                            echo "Escriba el nro de asiento del pasajero a modificar: ";
+                            $asiento = cargarNumerico();
                         }
                         switch ($opcionPasajero) {
                             case 1://cambiar el nombre de un pasajero
@@ -381,23 +387,23 @@ do {
                                     echo "Escriba el nuevo apellido del pasajero: ";
                                     $apellido = cargarLetras();
                                     echo "\n";
-                                    $funciono = $empresa->getViajes()[$seguir]->cambiarApellidoPas($dni,$apellido); 
+                                    $funciono = $empresa->getViajes()[$seguir]->cambiarAsiento($asiento,$apellido); 
                                     echo $funciono; 
                                 break;
-                            case 3: //Cambiar el DNI de un pasajero
+                                case 2: //Cambiar el asiento de un pasajero
                                     echo "\n";
-                                    echo "Escriba el nuevo DNI del pasajero: ";
-                                    $newDni = cargarNumerico();
+                                    echo "Escriba el nuevo asiento del pasajero: ";
+                                    $nuevoAsiento = cargarNumerico();
                                     echo "\n";
-                                    $funciono = $empresa->getViajes()[$seguir]->cambiarDniPas($dni,$newDni);
-                                    echo $funciono;
+                                    $funciono = $empresa->getViajes()[$seguir]->cambiarAsiento($asiento,$nuevoAsiento); 
+                                    echo $funciono; 
                                 break;
-                            case 4: //Cambiar el telefono de un pasajero
+                            case 4: //Agregar necesidades
                                     echo "\n";
-                                    echo "Escriba el nuevo telefono del pasajero: ";
-                                    $newTelefono = cargarNumerico();
+                                    echo "Escriba la necesidad especial del pasajero: ";
+                                    $newNecesidad = cargarLetras();
                                     echo "\n";
-                                    $funciono = $empresa->getViajes()[$seguir]->cambiarTelefono($dni,$newTelefono);
+                                    $funciono = $empresa->getViajes()[$seguir]->cambiarTelefono($asiento,$newNecesidad);
                                     echo $funciono;
                                 break;
                             case 5: //Cambiar todos los datos de un pasajero 
@@ -408,18 +414,15 @@ do {
                                     echo "Escriba el nuevo apellido del pasajero: ";
                                     $apellido = cargarLetras();
                                     echo "\n";
-                                    echo "Escriba el nuevo DNI del pasajero: ";
-                                    $newDni = cargarNumerico();
+                                    echo "Escriba el nuevo asiento del pasajero: ";
+                                    $nuevoAsiento = cargarNumerico();
                                     echo "\n";
-                                    echo "Escriba el nuevo telefono del pasajero: ";
-                                    $newTelefono = cargarNumerico();
-                                    echo "\n";
-                                    $funciono = $empresa->getViajes()[$seguir]->cambiarPasajero($dni,$nombre,$apellido,$newDni,$newTelefono);
+                                    $funciono = $empresa->getViajes()[$seguir]->cambiarPasajero($asiento,$nombre,$apellido,$nuevoAsiento);
                                     echo $funciono;
                                 break;
                         }
                     break;               
-                case 6: //Vender un pasajer
+                case 6: //Vender un pasaje
                         echo "Ingrese el nombre del pasajero: \n";
                         $nombre = cargarLetras();
                         echo "\n";
@@ -427,13 +430,40 @@ do {
                         $apellido = cargarLetras();
                         echo "\n";
                         echo "Ingrese el asiento deseado: \n";
-                        $dni = cargarNumerico();
+                        $asiento = cargarNumerico();
                         echo "\n";
-                        echo "Ingrese el telefono del pasajero a agregar: \n";
-                        $telefono = cargarNumerico();
+                        echo "Seleccione el tipo de pasajero (estandar - vip - especial) : \n";
+                        $pasajeroEs = cargarLetras();
+                        if ($pasajeroEs == "vip"){
+                            echo "Ingrese el numero de Viajero Frecuente: \n";
+                            $viajFrecuente = cargarNumerico();
+                            echo "\n";
+                            echo "Ingrese las millas actuales del passajero: \n";
+                            $millasAct = cargarNumerico();
+                            echo "\n"; 
+                            $pasajeroAVender = new PasajeroVip ($nombre, $apellido, $asiento, $viajFrecuente, $millasAct);
+                        }
+                        elseif ($pasajeroEs == "especial"){
+                            $necesidades = [];
+                            do {
+                                echo "Ingrese la necesidad del pasasajero: \n";
+                                $necesidad = cargarLetras();
+                                echo "\n";
+                                array_push ($necesidades, $necesidad);
+                                echo "Desea ingresar otra necesidad? si/no \n";
+                                $opcion = cargarNumerico();
+
+                            } while ($opcion == "si");
+                            $pasajeroAVender = new PasajeroEsp ($nombre, $apellido, $asiento, $necesidades);
+                        }
+                        elseif ($pasajeroEs == "estandar") {
+                            $pasajeroAVender = new Pasajero ($nombre, $apellido, $asiento);
+                        }
                         echo "\n";
-                        $funciono = $empresa->getViajes()[$seguir]->agregarPasajero($nombre,$apellido,$dni,$telefono);
-                        echo $funciono;
+                        $empresa->agregarPasajero($pasajeroAVender);
+                        $porcent = $empresa->darPorcentajeIncremento($pasajeroAVender);
+                        $rta = $empresa->getViajes()[$seguir]->venderPasaje($pasajeroAVender, $porcent);
+                        echo "El precio del pasaje es de: ".$rta." \n";
                     break;
                 case 8: //salir del menu
                     echo "\n";

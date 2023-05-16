@@ -11,11 +11,11 @@ class Viaje {
     private $totalAbonado;
 
     //creo el meotodo constructor de la clase
-    public function __construct ($codigo, $destinoV, $cantPasajeros,$responsable, $costoViaje, $totalAbonado){
+    public function __construct ($codigo, $destinoV, $cantPasajeros, $datosPas ,$responsable, $costoViaje, $totalAbonado){
         $this->codigoViaje = $codigo;
         $this->destino = $destinoV;
         $this->cantidadPasajeros = $cantPasajeros;
-        $this->datosPasajeros = []; //$datosPas;
+        $this->datosPasajeros = $datosPas;
         $this->responsable = $responsable;
         $this->costoViaje = $costoViaje;
         $this->totalAbonado = $totalAbonado;
@@ -92,13 +92,13 @@ class Viaje {
     } 
 
     //Creo un metodo para modificar dni de los pajeros
-    public function cambiarNombrePas  ($dniPasajero, $nuevoNombre){
+    public function cambiarNombrePas  ($asiento, $nuevoNombre){
         $i = 0;
         $rta = ""; //es valido usar una misma variable en todos los metodos? nunca se usan dos metodos al mismo tiempo no deberia tener conflicto, y no creo variables en exeso al usar solo una, dudasssssss
         $fueEncontrado = false;
         $arrayfunct = $this->getDatosPasajeros();
         while ($i < count($this->getDatosPasajeros ()) && !$fueEncontrado) { 
-            if (strcmp($dniPasajero,$this->getDatosPasajeros()[$i]->getNroDocumento ()) === 0){
+            if (strcmp($asiento,$this->getDatosPasajeros()[$i]->getNroAsiento()) === 0){
                 $arrayfunct [$i]->setNombre ($nuevoNombre);
                 $rta = "El cambio se realizo con exito. \n"."\n";
                 $fueEncontrado = true;
@@ -107,19 +107,19 @@ class Viaje {
             $i++;
         }
         if (!$fueEncontrado) {
-            $rta = "No se encontro el pasajero con el DNI: ".$dniPasajero." \n"."\n";
+            $rta = "No se encontro el pasajero en el asiento: ".$asiento." \n"."\n";
         }
         return $rta;
     }
 
      //Creo un metodo para modificar el apellido de los pajeros
-     public function cambiarApellidoPas  ($dniPasajero, $nuevoApellido){
+     public function cambiarApellidoPas  ($asiento, $nuevoApellido){
         $fueEncontrado = false;
         $i = 0;
         $rta = "";
         $arrayfunct = $this->getDatosPasajeros();
         while ($i < count($this->getDatosPasajeros ()) && !$fueEncontrado) { 
-            if (strcmp($dniPasajero,$this->getDatosPasajeros()[$i]->getNroDocumento ()) === 0){
+            if (strcmp($asiento,$this->getDatosPasajeros()[$i]->getNroAsiento ()) === 0){
                 $fueEncontrado = true;
                 $arrayfunct [$i]->setApellido ($nuevoApellido);
                 $rta = "El cambio se realizo con exito. \n"."\n";
@@ -128,7 +128,7 @@ class Viaje {
             $i++;
         }
         if (!$fueEncontrado){
-            $rta = "El cambio no pudo realizarse, es posible que el DNI del pasajero a modificar no sea valido, vuelva a intentarlo. \n"."\n";
+            $rta = "El cambio no pudo realizarse, es posible que no hay un pasasjero en ese asiento. \n"."\n";
         }
         return $rta;
     }
@@ -144,7 +144,7 @@ class Viaje {
                 $fueEncontrado = true;
                 $arrayfunct[$i]->setNombre ($nuevoNombre);
                 $arrayfunct[$i]->setApellido ($nuevoApellido);
-                $arrayfunct[$i]->setNroDocumento ($nuevoDni);
+                $arrayfunct[$i]->setNroAsiento ($nuevoDni);
                 $arrayfunct[$i]->setTelefono ($nuevoTelefono);
                 $rta = "El cambio se realizo con exito. \n"."\n";
                 $this->setDatosPasajeros ($arrayfunct);
@@ -170,17 +170,16 @@ class Viaje {
 
 
     //metodo para vender un pasasje del viaje
-    public function venderPasaje($pasajeroNuevo){
-        $totalActual = getTotalAbonado();
+    public function venderPasaje($pasajeroNuevo, $porc){
+        $totalActual = $this->getTotalAbonado();
             if ( $this->hayPasajesDisponibles() ) { 
                 $datos = $this->getDatosPasajeros ();
                 array_push ( $datos , $pasajeroNuevo);
                 $this->setDatosPasajeros($datos);
-                //array_push ($this->getDatosPasajeros () ); //no se puede usar?????
-                $porc = $pasajeroNuevo->darPorcentajeIncremento();
-                $importe = $porc * $this->getCostoViaje() / 100;
+                //$porc = $pasajeroNuevo->darPorcentajeIncremento($pasajeroNuevo);
+                $importe = $porc * ($this->getCostoViaje()) / 100;
                 $totalActual = $totalAbonado + $importe;
-                setTotalAbonado ($totalActual);
+                $this->setTotalAbonado ($totalActual);
             }
         return $importe;
     }

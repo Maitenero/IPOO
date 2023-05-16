@@ -7,7 +7,7 @@ class PasajeroVip extends Pasajero {
     private $nroViajeroFrecuente;
     private $millas;
 
-    public function __construct ($nombre, $apellido, $nroAsiento, $nroTikect, $nroViajeroFrecuente, $millas){
+    public function __construct ($nombre, $apellido, $nroAsiento, $nroViajeroFrecuente, $millas){
         
         parent:: __construct($nombre, $apellido, $nroAsiento);
         $this->nroViajeroFrecuente = $nroViajeroFrecuente;

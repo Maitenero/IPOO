@@ -6,7 +6,7 @@ class PasajeroEsp extends Pasajero {
 
     private $necesidades;
 
-    public function __construct ($nombre, $apellido, $nroAsiento, $nroTikect, $necesidades){
+    public function __construct ($nombre, $apellido, $nroAsiento, $necesidades){
         
         parent:: __construct($nombre, $apellido, $nroAsiento);
         $this->necesidades = $necesidades;
